@@ -10,14 +10,12 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView mListViewMain;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mListViewMain = findViewById(R.id.idListViewMain);
+        ListView mListViewMain = findViewById(R.id.idListViewMain);
 
         String[] itens = new String[] {"SharedPreferences", "Armazenamento Interno", "Armazenamento Externo"};
 
