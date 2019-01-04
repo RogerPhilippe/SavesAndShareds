@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         mListViewMain = findViewById(R.id.idListViewMain);
 
-        String[] itens = new String[] {"SharedPreferences"};
+        String[] itens = new String[] {"SharedPreferences", "Armazenamento Interno", "Armazenamento Externo"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, itens);
 
@@ -28,9 +28,18 @@ public class MainActivity extends AppCompatActivity {
         mListViewMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent;
                 switch(position) {
                     case 0:
-                        Intent intent = new Intent(MainActivity.this, SharedPreferencesActivity.class);
+                        intent = new Intent(MainActivity.this, SharedPreferencesActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        intent = new Intent(MainActivity.this, InternalStorageActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        intent = new Intent(MainActivity.this, ExternalStorageActivity.class);
                         startActivity(intent);
                         break;
                 }
