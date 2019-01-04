@@ -1,8 +1,8 @@
 package com.example.rpereira.savesandshareds;
 
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,17 +19,11 @@ public class ExternalStorageActivity extends AppCompatActivity {
 
     private EditText meditPersist;
 
-    private Button mbtnPersis;
-
-    private Button mbtnRecuperar;
-
     private String mfileName = "SampleFile.txt";
-
-    private String mfilePath = "MyFileStorage";
 
     private File mMyExternalFile;
 
-    private String mMyData = "";
+    private StringBuilder mMyData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +33,11 @@ public class ExternalStorageActivity extends AppCompatActivity {
 
         meditPersist = findViewById(R.id.ideditPersist);
 
-        mbtnPersis = findViewById(R.id.idbtnPersistir);
+        Button mbtnPersis = findViewById(R.id.idbtnPersistir);
 
-        mbtnRecuperar = findViewById(R.id.idbtnRecuperar);
+        Button mbtnRecuperar = findViewById(R.id.idbtnRecuperar);
 
-        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+        if (isExternalStorageAvailable() || isExternalStorageReadOnly()) {
             mbtnPersis.setEnabled(false);
         }
 
@@ -54,6 +48,12 @@ public class ExternalStorageActivity extends AppCompatActivity {
                     FileOutputStream fos = new FileOutputStream(mMyExternalFile);
                     fos.write(meditPersist.getText().toString().getBytes());
                     fos.close();
+                    /* Multiples lines
+                    PrintWriter writer = new PrintWriter( new OutputStreamWriter( fos ) );
+                    writer.println(meditPersist.getText().toString());
+                    writer.println(meditPersist2.getText().toString());
+                    writer.close();
+                     */
                     meditPersist.setText("");
                     Toast.makeText(ExternalStorageActivity.this, mfileName+
                             " salvo no armazenamento externo...", Toast.LENGTH_SHORT).show();
@@ -69,8 +69,9 @@ public class ExternalStorageActivity extends AppCompatActivity {
                     DataInputStream inputStream = new DataInputStream(fis);
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                     String strLine;
+                    mMyData = new StringBuilder();
                     while((strLine = bufferedReader.readLine()) != null) {
-                        mMyData += strLine;
+                        mMyData.append(strLine);
                     }
                     inputStream.close();
                     meditPersist.setText(mMyData);
@@ -80,10 +81,11 @@ public class ExternalStorageActivity extends AppCompatActivity {
             }
         });
 
-        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+        if (isExternalStorageAvailable() || isExternalStorageReadOnly()) {
             mbtnPersis.setEnabled(false);
         }
         else {
+            String mfilePath = "MyFileStorage";
             mMyExternalFile = new File(getExternalFilesDir(mfilePath), mfileName);
         }
 
@@ -91,18 +93,12 @@ public class ExternalStorageActivity extends AppCompatActivity {
 
     private static boolean isExternalStorageReadOnly() {
         String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState);
     }
 
     private static boolean isExternalStorageAvailable() {
         String extStorageState = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
-            return true;
-        }
-        return false;
+        return !Environment.MEDIA_MOUNTED.equals(extStorageState);
     }
 
 }

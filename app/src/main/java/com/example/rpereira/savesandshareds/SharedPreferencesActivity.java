@@ -35,7 +35,7 @@ public class SharedPreferencesActivity extends AppCompatActivity {
         editor.putBoolean("silentMode", mswSilent.isChecked());
 
         // Commit the edits.
-        editor.commit();
+        editor.apply();
 
     }
 }
