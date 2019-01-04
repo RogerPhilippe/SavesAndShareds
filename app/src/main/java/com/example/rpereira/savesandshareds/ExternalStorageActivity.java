@@ -55,7 +55,8 @@ public class ExternalStorageActivity extends AppCompatActivity {
                     fos.write(meditPersist.getText().toString().getBytes());
                     fos.close();
                     meditPersist.setText("");
-                    Toast.makeText(ExternalStorageActivity.this, mfileName+" salvo no armazenamento externo...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ExternalStorageActivity.this, mfileName+
+                            " salvo no armazenamento externo...", Toast.LENGTH_SHORT).show();
                 } catch (Exception er) { er.printStackTrace(); }
             }
         });
@@ -73,10 +74,18 @@ public class ExternalStorageActivity extends AppCompatActivity {
                     }
                     inputStream.close();
                     meditPersist.setText(mMyData);
-                    Toast.makeText(ExternalStorageActivity.this, mfileName+" Recuperado do armazenamento externo...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ExternalStorageActivity.this, mfileName+
+                            " Recuperado do armazenamento externo...", Toast.LENGTH_SHORT).show();
                 } catch (Exception er) { er.printStackTrace(); }
             }
         });
+
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            mbtnPersis.setEnabled(false);
+        }
+        else {
+            mMyExternalFile = new File(getExternalFilesDir(mfilePath), mfileName);
+        }
 
     }
 
